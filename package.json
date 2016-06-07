@@ -1,0 +1,22 @@
+{
+  "name": "reddit-reader",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "conform": "^0.2.12",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "jade": "~1.11.0",
+    "mongodb": "^2.1.21",
+    "mongodbext": "^2.0.6",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0",
+    "twostep": "^0.4.1",
+    "underscore": "^1.8.3"
+  }
+}
