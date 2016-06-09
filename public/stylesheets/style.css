@@ -6,3 +6,7 @@ body {
 a {
   color: #00B7FF;
 }
+
+.searchField {
+    width: 400px;
+}

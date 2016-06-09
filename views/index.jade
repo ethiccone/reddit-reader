@@ -1,5 +1,34 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+	h1= title
+	label(for='redditUrl') URL:&nbsp;
+	input#redditUrl.searchField(
+		type='url',
+		placeholder='something like http://www.reddit.com/r/javascript/.json',
+		required)
+	h3 Parameters
+	table
+		tr
+			td
+				label(for='aggregationAction') Aggregation
+				input#aggregationAction(name='action', type='radio', checked)
+			td
+				label(for='sortingAction') Sorting
+				input#sortingAction(name='action', type='radio')
+		tr
+			td(colspan='2')
+				div#aggregationPanel(style='display: none')
+					include includes/aggregation
+					+aggregateParamsPanel(delimiters)
+				div#sortingPanel(style='display: none')
+					include includes/sorting
+		tr
+			td(colspan='2')
+				button#submitButton Send
+	form#_submitForm(method="POST", action="/read")
+		input#_url(type="hidden", name="url", value="")
+		input#_operation(type="hidden", name="operation", value="")
+		input#_delimiter(type="hidden", name="delimiter", value="")
+
+	script(src='/javascripts/app.js')

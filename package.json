@@ -12,10 +12,13 @@
     "debug": "~2.2.0",
     "express": "~4.13.1",
     "glob": "^7.0.3",
+    "http-errors": "^1.5.0",
     "jade": "~1.11.0",
+    "json2csv": "^3.4.2",
     "mongodb": "^2.1.21",
     "mongodbext": "^2.0.6",
     "morgan": "~1.6.1",
+    "request": "^2.72.0",
     "serve-favicon": "~2.3.0",
     "twostep": "^0.4.1",
     "underscore": "^1.8.3"
