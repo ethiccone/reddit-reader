@@ -3,8 +3,8 @@
 var express = require('express');
 var router = express.Router();
 
-var root = require('./handlers/root');
+var read = require('./handlers/read');
 
-router.get('/', root);
+router.post('/', read);
 
 module.exports = router;

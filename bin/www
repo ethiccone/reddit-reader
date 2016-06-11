@@ -7,7 +7,7 @@ var http = require('http');
 var mongo = require('../db/mongo');
 
 mongo.connect(function () {
-  var app = require('../app');
+	var app = require('../app');
 	var server = http.createServer(app);
 
 
@@ -50,11 +50,11 @@ function normalizePort(val) {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
-    return val;
+	return val;
   }
 
   if (port >= 0) {
-    return port;
+	return port;
   }
 
   return false;

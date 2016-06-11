@@ -6,7 +6,7 @@ module.exports = {
 		collectionsSettings: {
 			articles: {
 				createdAt: {
-					expireAfterSeconds: 3600
+					expireAfterSeconds: 360
 				}
 			}
 		}

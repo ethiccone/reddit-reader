@@ -7,7 +7,8 @@ var bodyParser = require('body-parser');
 
 var HTTPError = require('http-errors');
 
-var routes = require('./routes/index');
+var mainRoute = require('./routes/index');
+var readRoute = require('./routes/read');
 
 var app = express();
 
@@ -23,11 +24,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
+app.use('/', mainRoute);
+app.use('/read', readRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(HTTPError.NotFound('Not Found'));
+	next(HTTPError.NotFound('Not Found'));
 });
 
 // error handlers
@@ -35,23 +37,23 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
+	app.use(function(err, req, res, next) {
+		res.status(err.status || 500);
+		res.render('error', {
+			message: err.message,
+			error: err
+		});
+	});
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: {}
-  });
+	res.status(err.status || 500);
+	res.render('error', {
+		message: err.message,
+		error: {}
+	});
 });
 
 

@@ -1,9 +1,0 @@
-mixin aggregateParamsPanel(delimiters)
-    table
-        tr
-            td
-                p Delimiter:
-            td
-                select#aggDelimiter
-                    each val in delimiters
-                        option(value= val.key)= val.text

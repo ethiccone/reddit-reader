@@ -1,0 +1,10 @@
+table
+	tr
+		td Delimiter:
+		td
+			select#aggregationDelimiter
+				each val in params.delimiters
+					option(value= val.key)= val.text
+	tr
+		td(colspan = '2')
+			button#aggregationButton Aggregate

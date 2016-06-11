@@ -7,7 +7,7 @@ var delimiters = config.delimiters;
 
 module.exports = {
 	properties: {
-		action: {
+		operation: {
 			enum: [operations.AGGREGATION],
 			messages: {
 				enum: 'Wrong action'

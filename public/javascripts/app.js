@@ -1,88 +1,135 @@
 'use strict';
-(function () {
-	var elementsIDs = [
-		'redditUrl',
-		'submitButton',
-		'aggregationAction', 'aggregationPanel', 'aggDelimiter',
-		'sortingAction', 'sortingPanel',
-		'_submitForm', '_url', '_operation', '_delimiter'
-	];
-	var elements = findElements(elementsIDs);
 
-	var operations = [{
-		name: 'aggregation',
-		radioId: 'aggregationAction',
-		panelId: 'aggregationPanel',
-		activationHandler: function () {
-			toogleVisibility (operations, this.panelId);
-		}
-	}, {
-		name: 'sorting',
-		radioId: 'sortingAction',
-		panelId: 'sortingPanel',
-		activationHandler: function () {
-			toogleVisibility (operations, this.panelId);
-		}
-	}];
+(function (params) {
+	var operations = {
+		aggregation: {
+			elements: ['aggregationPanel', 'aggregationDelimiter', 'aggregationButton'],
+			panel: 'aggregationPanel',
+			submitButton: 'aggregationButton',
+			submit: function () {
+				submit({
+					operation: activeOperation,
+					url: elements.redditUrl.value,
+					delimiter: elements.aggregationDelimiter.value
+				});
+			}
+		},
+		sorting: {
+			elements: [
+				'sortingPanel', 'sortingDelimiter', 'sortingButton',
+				'field', 'direction',
+				'tableName', 'id', 'title', 'created', 'score'
+			],
+			panel: 'sortingPanel',
+			submitButton: 'sortingButton',
+			submit: function () {
+				var format;
+				var radios = document.getElementsByName('sortingOutputFormat');
+				for (var i = 0, len = radios.length; i < len; ++i) {
+					if (radios[i].checked) {
+						format = radios[i].value;
+						break;
+					}
+				}
 
-	var state = {
-		operation: operations[0].name
-	};
-	operations[0].activationHandler();
+				var tableName = elements.tableName.value;
+				if (!tableName && format === 'sql') {
+					return alert('Table name is required!');
+				}
 
-
-
-	elements.submitButton.onclick = function () {
-		if (elements.aggregationAction.checked) {
-			return submitAggregation();
-		}
-		if (elements.sortingAction.checked) {
-			return submitSorting();
-		}
-	};
-
-	operations.forEach(function (operation) {
-		elements[operation.radioId].onchange = function () {
-			state.operation = operation.name;
-			operation.activationHandler();
-		}
-	});
-
-
-	function submit (parameters) {
-		for (var key in parameters) {
-			if (parameters.hasOwnProperty(key)) {
-				elements['_' + key].value = parameters[key];
+				submit({
+					operation: activeOperation,
+					url: elements.redditUrl.value,
+					delimiter: elements.sortingDelimiter.value,
+					format: format,
+					field: elements.field.value,
+					direction: elements.direction.value,
+					tableName: tableName,
+					id: elements.id.value,
+					title: elements.title.value,
+					created: elements.created.value,
+					score: elements.score.value
+				})
 			}
 		}
-		elements._submitForm.submit();
-	}
+	};
+	var activeOperation;
+	var elements = findElements();
 
-	function findElements (elementsIDs) {
+	init();
+
+	function findElements() {
 		var result = {};
+		var ids = ['redditUrl', 'operationsSelect', '_submitForm'];
 
-		elementsIDs.forEach(function (elementId) {
-			result[elementId] = document.getElementById(elementId);
+		forIn(params.operations, function (op) {
+			ids = ids.concat(operations[op].elements);
+		});
+
+		ids.forEach(function (id) {
+			result[id] = document.getElementById(id);
 		});
 
 		return result;
 	}
 
-	function submitSorting () {
-		console.log('sorting submitted');
-	}
-
-	function submitAggregation () {
-		submit({
-			operation: state.operation,
-			url: elements.redditUrl.value,
-			delimiter: elements.aggDelimiter.value
+	function panelsSwitcher(activePanel) {
+		forIn(params.operations, function (op) {
+			var panelId = operations[op].panel;
+			elements[panelId].style.display = activePanel === panelId ? 'block' : 'none';
 		});
 	}
 
-	function toogleVisibility (operations, visibleElementId) {
-		operations.forEach(function (operation) {
-			elements[operation.panelId].style.display = operation.panelId === visibleElementId ? 'block' : 'none';
-		})
+	function activateOperation (operation) {
+		activeOperation = operation;
+		panelsSwitcher(operations[operation].panel);
 	}
-})();
+
+	function addEventListeners () {
+		elements.operationsSelect.onchange = function (event) {
+			activateOperation (event.target.value);
+		};
+
+		forIn(params.operations, function (value, key) {
+			var operation = operations[value];
+			elements[operation.submitButton].onclick = operation.submit;
+		});
+	}
+
+	function init() {
+		addEventListeners();
+		elements.operationsSelect.value = params.activeOperation;
+		activateOperation(params.activeOperation);
+	}
+
+	function submit (parameters) {
+		if (!elements.redditUrl.value) {
+			return alert('URL field is empty');
+		}
+
+		var form = elements._submitForm;
+		// remove all inputs from the form
+		while (form.firstChild) {
+			form.removeChild(form.firstChild);
+		}
+		// add inputs into the form
+		forIn(parameters, function (value, key) {
+			var input = document.createElement('input');
+			input.type = 'hidden';
+			input.name = key;
+			input.value = value;
+
+			form.appendChild(input);
+		});
+
+		form.submit();
+	}
+
+	function forIn (obj, callback) {
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key)) {
+				callback(obj[key], key);
+			}
+		}
+	}
+})(document.params);

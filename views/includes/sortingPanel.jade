@@ -1,0 +1,63 @@
+table
+	tr
+		td Field:
+		td(colspan = '3')
+			select#field
+				each val in params.fields
+					option(value=val)= val
+	tr
+		td Direction:
+		td(colspan = '3')
+			select#direction
+				each val in params.directions
+					option(value=val)= val
+	tr
+		td(colspan='4')
+			b Output format:
+	tr
+		td(colspan = '2')
+			label(for='sortingOutputFormatCsv') CSV
+			input#sortingOutputFormatCsv(
+				name='sortingOutputFormat', type='radio', checked, value='csv'
+			)
+		td(colspan = '2')
+			label(for='sortingOutputFormatSql') SQL
+			input#sortingOutputFormatSql(
+				name='sortingOutputFormat', type='radio', value='sql'
+			)
+	tr
+		td Delimiter:
+		td
+			select#sortingDelimiter
+				each val in params.delimiters
+					option(value= val.key)= val.text
+		td Table name:
+		td
+			input#tableName(type='text', value='')
+	tr
+		td(colspan = '2')
+		td(colspan = '2')
+			b Fields names (not required):
+	tr
+		td(colspan = '2')
+		td id:
+		td
+			input#id(type='text', value='')
+	tr
+		td(colspan = '2')
+		td title:
+		td
+			input#title(type='text', value='')
+	tr
+		td(colspan = '2')
+		td created:
+		td
+			input#created(type='text', value='')
+	tr
+		td(colspan = '2')
+		td id:
+		td
+			input#score(type='text', value='')
+	tr
+		td(colspan = '4')
+			button#sortingButton Sorting
